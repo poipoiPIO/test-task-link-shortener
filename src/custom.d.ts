@@ -1,7 +1,8 @@
 declare namespace Express {
+    import { RedisClientType } from 'redis';
     export interface Request {
-        // For attaching to request
         userId?: string;
         user?: string | Object;
+        redis?: RedisClientType;
     }
 }

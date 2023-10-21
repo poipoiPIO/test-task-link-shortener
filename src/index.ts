@@ -1,9 +1,9 @@
 import express from 'express';
-import { connectDB } from './db/connect';
+import { connectDB } from './db/mongo-connector';
 import { notFound } from './middleware/not-found';
 import { errorHandlerMiddleware } from './middleware/error-handler';
-import authRoute from './routes/auth';
-import protectedRoutes from './routes/protected';
+import userRoute from './routes/user';
+import shortnerRoute from './routes/shortner';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -14,8 +14,8 @@ const app = express();
 
 app.use(express.json());
 
-app.use('/user', authRoute);
-app.use('/', protectedRoutes);
+app.use('/user', userRoute);
+app.use('/', shortnerRoute);
 
 app.use(notFound);
 app.use(errorHandlerMiddleware);
