@@ -1,0 +1,59 @@
+
+version: '0.1.0'
+services:
+  my-api:
+    container_name: api
+    restart: always
+    build:
+      context: ./
+      dockerfile: ./api.Dockerfile
+    ports:
+      - $PORT:$PORT
+    command: 
+      sh -c "(npm run build && npm run start)"
+    environment:
+      PORT: $PORT
+      MONGO_URI: $MONGO_URI
+      REDIS_CACHE_URI: $REDIS_CACHE_URI
+      JWT_SECRET: $JWT_SECRET
+      JWT_LIFETIME: $JWT_LIFETIME
+      SERVICE_BASE_URL: $SERVICE_BASE_URL
+    depends_on:
+      - db
+      - redis
+    links:
+      - db
+      - redis
+    networks:
+      - network
+
+  redis:
+    container_name: redis
+    image: redis:5
+    ports:
+      - "6379:6379"
+    restart: always
+    networks:
+      - network
+
+  db:
+    container_name: db
+    image: mongo:3.6
+    restart: always
+    environment:
+      MONGO_DATA_DIR: /data/db
+      MONGO_LOG_DIR: /dev/null
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - "27017:27017"
+    command: mongod --smallfiles --port 27017 --bind_ip_all # --quiet
+    networks:
+      - network
+
+volumes:
+  mongo-data:
+
+networks:
+  network:
+    driver: bridge

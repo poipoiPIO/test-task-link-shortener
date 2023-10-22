@@ -1,0 +1,136 @@
+openapi: 3.1.0
+x-stoplight:
+  id: bnohgcxf1cl3x
+info:
+  title: url-shortener-api
+  version: '1.0'
+  description: ''
+servers:
+  - url: 'http://localhost:8000'
+paths:
+  /user/links:
+    parameters: []
+    get:
+      summary: Get links added by user
+      tags: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  Example 1:
+                    items:
+                      - originResource: 'https://stackoverflow.com/questions/43011742/how-to-omit-specific-properties-from-an-object-in-javascript'
+                        shortenedLink: 'http://localhost:8000/K_4ESjQd2zDSBMgggBiQx'
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserItem'
+              examples:
+                '':
+                  value:
+                    items:
+                      - originResource: 'https://stackoverflow.com/questions/43011742/how-to-omit-specific-properties-from-an-object-in-javascript'
+                        shortenedLink: 'http://localhost:8000/K_4ESjQd2zDSBMgggBiQx'
+    post:
+      summary: Short new link
+      operationId: post-user-links
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserItem'
+              examples:
+                Example 1:
+                  value:
+                    originResource: 'https://stackoverflow.com/questions/43011742/how-to-omit-specific-properties-from-an-object-in-javascript'
+                    shortenedLink: 'http://localhost:8000/K_4ESjQd2zDSBMgggBiQx'
+      security:
+        - User authorization: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+            examples: {}
+        description: ''
+  /user/login:
+    post:
+      summary: Login exist user into a system
+      operationId: post-user-login
+      responses:
+        '200':
+          description: OK
+          headers:
+            Authorization:
+              schema:
+                type: string
+              description: JWT Authorization header
+          content:
+            application/json:
+              schema:
+                type: string
+                description: login token
+  /user/register:
+    parameters: []
+    post:
+      summary: Register user into the system
+      operationId: post-user-register
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                password:
+                  type: string
+  '/{shortenedLinkResourceKey}':
+    parameters:
+      - schema:
+          type: string
+        name: shortenedLinkResourceKey
+        in: path
+        required: true
+    get:
+      summary: Redirect user to the shortened resource
+      tags: []
+      responses: {}
+      operationId: get-shortenedLinkResourceKey
+      description: ''
+components:
+  schemas:
+    UserItem:
+      type: object
+      properties:
+        originResource:
+          type: string
+        shortenedLink:
+          type: string
+      x-examples:
+        Example 1:
+          originResource: 'https://stackoverflow.com/questions/43011742/how-to-omit-specific-properties-from-an-object-in-javascript'
+          shortenedLink: 'http://localhost:8000/K_4ESjQd2zDSBMgggBiQx'
+      title: Link added by user
+  securitySchemes:
+    User authorization:
+      type: oauth2
