@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { z } from 'zod';
+import { loginSchema } from '../controllers/user/schemas';
 import bcrypt from 'bcryptjs';
 import User from '../models/User';
 
@@ -8,15 +8,8 @@ type RequestBody = {
     password: string;
 };
 
-const loginSchema = z
-    .object({
-        login: z.string().min(1),
-        password: z.string().min(6)
-    })
-    .strict();
-
 export async function loginValidation(req: Request, res: Response, next: NextFunction) {
-    const parsed = loginSchema.safeParse(req.body);
+    const parsed = await loginSchema.safeParseAsync(req.body);
     if (!parsed.success) {
         res.status(400).send(parsed.error);
         return;

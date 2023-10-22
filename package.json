@@ -7,6 +7,7 @@
     "start": "node dist/index.js",
     "dev": "nodemon dist/index.js",
     "format": "prettier --config .prettierrc 'src/**/*.ts' --write",
+    "lint": "eslint . --ext .ts",
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,11 +23,13 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.6.3",
+    "nanoid": "^3.3.4",
     "redis": "^4.6.10",
     "typescript": "^4.9.4",
     "zod": "^3.20.2"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.8.0",
     "nodemon": "^2.0.20"
   }
 }

@@ -1,6 +1,6 @@
 import { Schema, model, Document, ObjectId } from 'mongoose';
 
-interface IUserHistoryItem extends Document {
+export interface IUserHistoryItem extends Document {
     shortLinkKey: string;
     originalURI: string;
     userId: ObjectId;
